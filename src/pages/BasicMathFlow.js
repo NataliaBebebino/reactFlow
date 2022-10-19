@@ -12,16 +12,19 @@ import classes from "./BasicFlow.module.css";
 
 import NumberNode from "../customNodes/NumberNode";
 import OperatorNode from "../customNodes/OperatorNode";
+// import ResultNode from "../customNodes/ResultNode";
 
 const nodeTypes = {
   number: NumberNode,
   operator: OperatorNode,
+  // result: ResultNode,
 };
 
 const initialNodes = [
   {
     id: "1",
     type: "number",
+    data: { label: 0 },
     position: { x: 100, y: 100 },
   },
   {
@@ -32,12 +35,14 @@ const initialNodes = [
   {
     id: "3",
     type: "number",
+    data: { label: 0 },
     position: { x: 100, y: 300 },
   },
   {
     id: "4",
     type: "output",
-    data: { label: 2 },
+    //type: "result",
+    data: { label: 0 },
     position: { x: 200, y: 400 },
   },
 ];
@@ -69,6 +74,12 @@ const BasicMathFlow = () => {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
   const [result, setResult] = useState(0);
+
+  useEffect(() => {
+      console.log("console", nodes[0].data.label)
+
+    // setResult()
+  }, [nodes])
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
