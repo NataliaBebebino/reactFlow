@@ -19,14 +19,19 @@ const initialNodes = [
 
 const BasicSumFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [state, setState] = useState(null);
+  const [enteredNumber, setEnteredNumber] = useState("");
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const onAdd = () => {
+    if (enteredNumber === "") {
+      alert("Enter a valid number");
+      return;
+    }
+
     const id = (nodes.length + 1).toString();
     const newNode = {
       id,
-      data: { label: `${state.number}` },
+      data: { label: `${enteredNumber}` },
       position: {
         x: 100,
         y: nodes[nodes.length - 1].position.y - 70,
@@ -52,14 +57,9 @@ const BasicSumFlow = () => {
       })
     );
 
-    console.log(edges, "estos son los edges");
-
     // Add edges (connections)
     let sourceNodeId = newNode.id;
     let targetNodeId = newNode.id - 1;
-
-    console.log("sourceNodeId", sourceNodeId);
-    console.log("targetNodeId", targetNodeId);
 
     let newEdge = {
       id: `${sourceNodeId}-${targetNodeId}`,
@@ -69,20 +69,39 @@ const BasicSumFlow = () => {
       animated: targetNodeId === 1,
     };
     setEdges((edgs) => edgs.concat(newEdge));
+
+    setEnteredNumber("");
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      onAdd();
+    }
   };
 
   return (
     <div>
       <div className={classes.divContainer}>
-        <input
-          type="number"
-          placeholder="Enter a number"
-          onChange={(e) => {
-            setState((prev) => ({ ...prev, number: e.target.value }));
-          }}
-        ></input>
-        <button onClick={onAdd}>Add to the sum</button>
-        <ReactFlow
+        <div className={classes.flexContainer}>
+          <div className={classes.flexContainerItem}>
+            <input
+              className={classes.input}
+              type="number"
+              placeholder="Enter a number"
+              value={enteredNumber}
+              onChange={(e) => {
+                setEnteredNumber(e.target.value);
+              }}
+              onKeyDown={handleKeyDown}
+            ></input>
+          </div>
+          <div className={classes.flexContainerItem}>
+            <button className={classes.button} onClick={onAdd}>
+              Add to the sum
+            </button>
+          </div>
+        </div>
+        <ReactFlow 
           fitView /*This is to make it fit into the div container */
           proOptions={{
             hideAttribution: true,
@@ -93,7 +112,7 @@ const BasicSumFlow = () => {
           onNodesChange={onNodesChange}
         >
           <Background color="red" /> {/* this is the color of the dots */}
-          <Controls /> {/*this is to zoom in and out and other features */}
+          <Controls className={classes.control}/> {/*this is to zoom in and out and other features */}
         </ReactFlow>
       </div>
     </div>
