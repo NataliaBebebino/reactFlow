@@ -11,7 +11,6 @@ import classes from "./BasicFlow.module.css";
 const initialNodes = [
   {
     id: "1",
-    // type: "input",
     data: {
       label: "Hi",
     },
@@ -19,7 +18,6 @@ const initialNodes = [
   },
   {
     id: "2",
-    // type: "input",
     data: {
       label: "I'm Nati",
     },
@@ -27,7 +25,6 @@ const initialNodes = [
   },
   {
     id: "3",
-    // type: "input",
     data: {
       label: "a passionate",
     },
@@ -35,7 +32,6 @@ const initialNodes = [
   },
   {
     id: "4",
-    // type: "input",
     data: {
       label: "developer",
     },
