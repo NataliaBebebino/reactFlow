@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import ReactFlow, {
-  ReactFlowProvider,
   useNodesState,
   useEdgesState,
+  Background,
+  Controls,
 } from "reactflow";
 import "reactflow/dist/style.css";
-
-// const initialNodes = [
-//   { id: "1", data: { label: "Node 1" }, position: { x: 100, y: 100 } },
-//   { id: "2", data: { label: "Node 2" }, position: { x: 100, y: 200 } },
-// ];
+import classes from "./BasicFlow.module.css";
 
 const initialNodes = [
   {
@@ -20,12 +17,10 @@ const initialNodes = [
   },
 ];
 
-const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
-
 const BasicSumFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges] = useEdgesState(initialEdges);
   const [state, setState] = useState(null);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const onAdd = () => {
     const id = (nodes.length + 1).toString();
@@ -33,8 +28,9 @@ const BasicSumFlow = () => {
       id,
       data: { label: `${state.number}` },
       position: {
-        x: 0,
-        y: 0 + (nodes.length + 1) * 20,
+        x: 100,
+        //y: 0 + (nodes.length + 1) * 20,
+        y: nodes[nodes.length - 1].position.y - 50,
       },
     };
 
@@ -57,22 +53,47 @@ const BasicSumFlow = () => {
       })
     );
 
-    console.log(newNode, "este es el nuevo nodo");
+    console.log(edges, "estos son los edges");
+
+    // Add edges (connections)
+    let sourceNodeId = newNode.id;
+    let targetNodeId = newNode.id - 1;
+
+    console.log("sourceNodeId", sourceNodeId);
+    console.log("targetNodeId", targetNodeId);
+
+    let newEdge = {
+      id: `${sourceNodeId}-${targetNodeId}`,
+      source: sourceNodeId.toString(),
+      target: targetNodeId.toString(),
+    };
+    setEdges((edgs) => edgs.concat(newEdge));
   };
-  console.log(nodes, "estos son los nodos");
 
   return (
     <div>
-      Number:
       <input
         type="number"
+        placeholder="Enter a number"
         onChange={(e) => {
           setState((prev) => ({ ...prev, number: e.target.value }));
         }}
       ></input>
       <button onClick={onAdd}>Add to the sum</button>
-      <div style={{ width: "500px", height: "500px" }}>
-        <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} />
+      <div className={classes.divContainer}>
+        <ReactFlow
+          fitView /*This is to make it fit into the div container */
+          proOptions={{
+            hideAttribution: true,
+          }} /*This is to delete the footer from the react-flow creators */
+          nodes={nodes}
+          edges={edges}
+          onEdgesChange={onEdgesChange}
+          onNodesChange={onNodesChange}
+        >
+          <Background color="red" /> {/* this is the color of the dots */}
+          <Controls /> {/*this is to zoom in and out and other features */}
+        </ReactFlow>
       </div>
     </div>
   );
