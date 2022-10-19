@@ -29,8 +29,7 @@ const BasicSumFlow = () => {
       data: { label: `${state.number}` },
       position: {
         x: 100,
-        //y: 0 + (nodes.length + 1) * 20,
-        y: nodes[nodes.length - 1].position.y - 50,
+        y: nodes[nodes.length - 1].position.y - 70,
       },
     };
 
@@ -66,21 +65,23 @@ const BasicSumFlow = () => {
       id: `${sourceNodeId}-${targetNodeId}`,
       source: sourceNodeId.toString(),
       target: targetNodeId.toString(),
+      label: targetNodeId === 1 ? "=" : "+",
+      animated: targetNodeId === 1,
     };
     setEdges((edgs) => edgs.concat(newEdge));
   };
 
   return (
     <div>
-      <input
-        type="number"
-        placeholder="Enter a number"
-        onChange={(e) => {
-          setState((prev) => ({ ...prev, number: e.target.value }));
-        }}
-      ></input>
-      <button onClick={onAdd}>Add to the sum</button>
       <div className={classes.divContainer}>
+        <input
+          type="number"
+          placeholder="Enter a number"
+          onChange={(e) => {
+            setState((prev) => ({ ...prev, number: e.target.value }));
+          }}
+        ></input>
+        <button onClick={onAdd}>Add to the sum</button>
         <ReactFlow
           fitView /*This is to make it fit into the div container */
           proOptions={{
