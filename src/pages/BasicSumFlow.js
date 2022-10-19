@@ -14,6 +14,7 @@ const initialNodes = [
     type: "output",
     data: { label: "0" },
     position: { x: 100, y: 100 },
+    deletable: false,
   },
 ];
 
@@ -36,6 +37,7 @@ const BasicSumFlow = () => {
         x: 100,
         y: nodes[nodes.length - 1].position.y - 70,
       },
+      deletable: false, // this is to disable the possibility of deleting the node
     };
 
     //Add new node
@@ -67,6 +69,7 @@ const BasicSumFlow = () => {
       target: targetNodeId.toString(),
       label: targetNodeId === 1 ? "=" : "+",
       animated: targetNodeId === 1,
+      deletable: false, // this is to disable the possibility of deleting the edge
     };
     setEdges((edgs) => edgs.concat(newEdge));
 
@@ -81,7 +84,7 @@ const BasicSumFlow = () => {
 
   return (
     <div>
-      <div className={classes.divContainer}>
+      <div className={classes.headerContainer}>
         <div className={classes.flexContainer}>
           <div className={classes.flexContainerItem}>
             <input
@@ -101,7 +104,9 @@ const BasicSumFlow = () => {
             </button>
           </div>
         </div>
-        <ReactFlow 
+      </div>
+      <div className={classes.divContainer}>
+        <ReactFlow
           fitView /*This is to make it fit into the div container */
           proOptions={{
             hideAttribution: true,
@@ -112,7 +117,8 @@ const BasicSumFlow = () => {
           onNodesChange={onNodesChange}
         >
           <Background color="red" /> {/* this is the color of the dots */}
-          <Controls className={classes.control}/> {/*this is to zoom in and out and other features */}
+          <Controls className={classes.control} />{" "}
+          {/*this is to zoom in and out and other features */}
         </ReactFlow>
       </div>
     </div>
