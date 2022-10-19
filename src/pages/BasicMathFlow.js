@@ -1,44 +1,43 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo, useEffect } from "react";
 import ReactFlow, {
   Background,
   Controls,
   applyNodeChanges,
   applyEdgeChanges,
+  Handle,
+  Position,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import classes from "./BasicFlow.module.css";
 
+import NumberNode from "../customNodes/NumberNode";
+import OperatorNode from "../customNodes/OperatorNode";
+
+const nodeTypes = {
+  number: NumberNode,
+  operator: OperatorNode,
+};
+
 const initialNodes = [
   {
     id: "1",
-    // type: "input",
-    data: {
-      label: "Hi",
-    },
+    type: "number",
     position: { x: 100, y: 100 },
   },
   {
     id: "2",
-    // type: "input",
-    data: {
-      label: "I'm Nati",
-    },
+    type: "operator",
     position: { x: 200, y: 200 },
   },
   {
     id: "3",
-    // type: "input",
-    data: {
-      label: "a passionate",
-    },
+    type: "number",
     position: { x: 100, y: 300 },
   },
   {
     id: "4",
-    // type: "input",
-    data: {
-      label: "developer",
-    },
+    type: "output",
+    data: { label: 2 },
     position: { x: 200, y: 400 },
   },
 ];
@@ -61,13 +60,15 @@ const initialEdges = [
     source: "3",
     target: "4",
     type: "smoothstep",
+    label: "=",
+    animated: "true",
   },
 ];
 
-
-const BasicFlow = () => {
+const BasicMathFlow = () => {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
+  const [result, setResult] = useState(0);
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -83,8 +84,11 @@ const BasicFlow = () => {
     <div className={classes.divContainer}>
       <ReactFlow
         fitView /*This is to make it fit into the div container */
-        proOptions={{hideAttribution:true}} /*This is to delete the footer from the react-flow creators */
+        proOptions={{
+          hideAttribution: true,
+        }} /*This is to delete the footer from the react-flow creators */
         nodes={nodes}
+        nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         edges={edges}
         onEdgesChange={onEdgesChange}
@@ -96,4 +100,4 @@ const BasicFlow = () => {
   );
 };
 
-export default BasicFlow;
+export default BasicMathFlow;
